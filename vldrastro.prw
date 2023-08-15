@@ -1,4 +1,6 @@
 #INCLUDE 'TOTVS.CH'
+#INCLUDE 'TOPCONN.CH'
+#INCLUDE 'TBICONN.CH'
 
 /*/{Protheus.doc} nomeFunction
     (long_description)
@@ -14,32 +16,28 @@
     /*/
 User Function VldRastro()
 
-Local aArea     := FwGetArea()
-//Local cRastro   := ""
-Local nOper     := 
-Local lVld      := .T.
+Local aArea   := FwGetArea()
+//Local nOper   := 
+Local lVld    := .T.
+Local nPLote    := aScan(aHeader,{|x| AllTrim(x[2]) == "D1_LOTECTL"})
+Local cLote   := acols[n][nPLote]
+Local nPDtVen   := aScan(aHeader,{|x| AllTrim(x[2]) == "D1_DTVALID"})
+Local cDtVen  := acols[n][nPDtVen]
+Local nPCod      
+Private cD1Cod    := ""
+Private cRastro := ""
 
+    nPCod := aScan(aHeader,{|x| AllTrim(x[2]) == "D1_COD"})
+    cD1Cod := aCols[n][nPCod]
 
-If SB1->B1_Rastro <> 'N'
-    If Empty(M->D1_LOTECTL) .and. Empty(M->D1_DTVALID)
+TemRastro()
+
+If cRastro <> 'N'
+    If Empty(cLote) .and. Empty(cDtVen)
         lVld := .F.
         Help(,,"Atenção!",,"Produto informado possui controle de lote!",1,0,,,,,,{"Verifique os campos de Lote e Data de Validade para continuar."})
     EndIf
 EndIf
-
-Local lRetorno
-
-If cNumPC =' ' .And. cItemPC=' '
-lRetorno:= .T.
-
-Elseif cNumPC <>' ' .And. cItemPC<>' '
-lRetorno:= .T.
-Else
-Alert("Favor preencher o pedido/item do pedido de compra.")
-lRetorno:= .F.
-
-EndIf
-
 
     FwRestArea(aArea)
 Return lVld
@@ -47,16 +45,20 @@ Return lVld
 Static Function TemRastro()
 
 Local cQry      := ""
-Local cD1Cod    := ""
-Local nPos      := 0
+Local aArea := GetArea()
 
-    nPos := aScan(aHeader,{|x| x[2]=="D1_COD"})
-    cD1Cod := aCols[n][nPos]
-
+    TCQUERY cQry New Alias Qry 
     cQry := " SELECT D1_LOTECTL, D1_COD, B1_RASTRO " + CRLF
     cQry += " FROM " + RetSqlName('SD1') + CRLF
     cQry += " INNER JOIN " + RetSqlName('SB1') + CRLF
     cQry += " ON B1_COD = D1_COD " + CRLF
-    cQry += " WHERE D1_COD = cD1Cod "
+    cQry += " WHERE D1_COD = ' " + cD1Cod + " ' "
+    
+    While !Qry->(EOF())
+        cRastro := Qry->(B1_RASTRO)
+        Qry->(DbSkip())
+    EndDo
 
-Return cQry
+    RestArea(aArea)
+
+Return cRastro
