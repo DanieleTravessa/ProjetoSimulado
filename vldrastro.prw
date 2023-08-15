@@ -47,17 +47,22 @@ Static Function TemRastro()
 Local cQry      := ""
 Local aArea := GetArea()
 
-    TCQUERY cQry New Alias Qry 
+    
     cQry := " SELECT D1_LOTECTL, D1_COD, B1_RASTRO " + CRLF
     cQry += " FROM " + RetSqlName('SD1') + CRLF
-    cQry += " INNER JOIN " + RetSqlName('SB1') + CRLF
+    cQry += " INNER JOIN " + RetSqlName('SB1') + " SB1 " + CRLF
     cQry += " ON B1_COD = D1_COD " + CRLF
-    cQry += " WHERE D1_COD = ' " + cD1Cod + " ' "
+    cQry += " WHERE D1_COD = ' " + cD1Cod + " ' " + CRLF
+    cQry += " AND SB1.D_E_L_E_T_='' "
     
-    While !Qry->(EOF())
-        cRastro := Qry->(B1_RASTRO)
-        Qry->(DbSkip())
+    TCQUERY cQry New Alias "Qry_SD1"
+
+    While !(Qry_SD1)->(EOF())
+        cRastro := (Qry_SD1)->(B1_RASTRO)
+        (Qry_SD1)->(DbSkip())
     EndDo
+
+    (Qry_SB1)->(DbCloseArea())
 
     RestArea(aArea)
 
