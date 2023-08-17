@@ -1,6 +1,4 @@
 #INCLUDE 'TOTVS.CH'
-#INCLUDE 'TOPCONN.CH'
-#INCLUDE 'TBICONN.CH'
 
 /*/{Protheus.doc} VldRastro
     (Função Customizada para validar o preenchimento dos campos de Lote e Validade)
@@ -17,10 +15,8 @@ User Function VldRastro()
     Local cLote   := GdFieldGet("D1_LOTECTL")
     Local cDtVen  := GdFieldGet("D1_DTVALID")
     Local cD1Cod  := GdFieldGet("D1_COD")
-    Local cRastro
-     
-        cRastro := Posicione("SB1",1,FWxFilial("SB1")+cD1Cod,"B1_RASTRO")
-
+    Local cRastro := Posicione("SB1",1,FWxFilial("SB1")+cD1Cod,"B1_RASTRO")
+    
     If cRastro <> 'N' .and. !GDDeleted()
         If Empty(cLote) .or. Empty(cDtVen)
             lVld := .F.
