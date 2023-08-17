@@ -8,11 +8,9 @@
     @version 2     
     @see (links_or_references)
     /*/
-User Function VldRastro()
+User Function VldRastroT()
 
-    Local aArea   := FwGetArea()
-    Local aAreaB1 := SB1->(FwGetArea())
-    Local aAreaD1 := SD1->(FwGetArea())
+    Local aArea   := FwGetArea()  
     Local lVld    := .T.    
     Local cLote   := GdFieldGet("D1_LOTECTL")
     Local cDtVen  := GdFieldGet("D1_DTVALID")
@@ -26,8 +24,6 @@ User Function VldRastro()
         EndIf
     EndIf
 
-    FwRestArea(aAreaD1)
-    FwRestArea(aAreaB1)
-    FwRestArea(aArea)    
+    FwRestArea(aArea)
 
 Return lVld
