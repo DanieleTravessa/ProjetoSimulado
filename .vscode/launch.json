@@ -15,7 +15,13 @@
 	"lastPrograms": [
 		{
 			"label": "sigaest"
+		},
+		{
+			"label": "sigacom"
+		},
+		{
+			"label": "sigafin"
 		}
 	],
-	"lastProgramExecuted": "sigaest"
+	"lastProgramExecuted": "sigacom"
 }
