@@ -20,11 +20,11 @@ Local oGrid
 Local oDlg
 //Local aDados  := {}
 Local cQry := Consulta()
-Local cParcela := SE2->E2_PARCELA
+/*Local cParcela := SE2->E2_PARCELA
 Local cVencim := ''
 Local cValor   := ''
 Local cBaixa   := ''
-Local cValorPg := ''
+Local cValorPg := ''*/
 Private cNum   := SF1->F1_DOC
 
     DbUseArea(.T.,'TOPCONN',TcGenQry(,,cQry),cAlias,.T.,.T.)
@@ -33,8 +33,8 @@ Private cNum   := SF1->F1_DOC
     //DbSelectArea("SE2")
     //DbSelectArea("SE5")
 
-    (cAlias)->(DbGoTop())
-    //If (cAlias)->(!Eof())
+   (cAlias)->(DbGoTop())
+    If (cAlias)->(!Eof())
         While (cAlias)->(!Eof()) .and. (cAlias)->(E2_NUM) == cNum
             cParcela := (cAlias)->(E2_PARCELA)
             cVencim  := (cAlias)->(E2_VENCREA)
@@ -43,33 +43,32 @@ Private cNum   := SF1->F1_DOC
             cValorPg := (cAlias)->(E5_VALOR)             
             (cAlias)->(DbSkip())
         EndDo
-    //endIf
-    //(cAlias)->(DbCloseArea())
+    EndIf
+   
     /*SE5->(DbCloseArea())
     SE2->(DbCloseArea())*/
 
 DEFINE DIALOG oDlg TITLE 'Tìtulos a Pagar' FROM 180,180 TO 550, 700 PIXEL
     
-    oGrid := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,,,,,,,,,,,, .F., "", .T.,, .F.,,, )
+    oGrid := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,,,,,,,,,,,, .F., cAlias, .T.,, .F.,,, )
+        // DbSelectArea(cAlias)
         (cAlias)->(DbGoTop())
     //If (cAlias)->(!Eof())
-        While (cAlias)->(!Eof()) .and. (cAlias)->(E2_NUM) == cNum
-            cParcela := (cAlias)->(E2_PARCELA)
-            cVencim  := (cAlias)->(E2_VENCREA)
-            cValor   := (cAlias)->(E2_VALOR)
-            cBaixa   := (cAlias)->(E2_BAIXA)
-            cValorPg := (cAlias)->(E5_VALOR)             
-           
-    oGrid:AddColumn( TCColumn():new('Parcela'   , {||cParcela },,,,"LEFT",,.F.,.F.,,,,.F.,))
-    oGrid:AddColumn( TCColumn():new('Vencimento', {||cVencim  },,,,"LEFT",,.F.,.F.,,,,.F.,))
-    oGrid:AddColumn( TCColumn():new('Valor'     , {||cValor   },,,,"LEFT",,.F.,.F.,,,,.F.,))
-    oGrid:AddColumn( TCColumn():new('Baixa'     , {||cBaixa   },,,,"LEFT",,.F.,.F.,,,,.F.,))
-    oGrid:AddColumn( TCColumn():new('Valor Pago', {||cValorPg },,,,"LEFT",,.F.,.F.,,,,.F.,))
-    
-        (cAlias)->(DbSkip())
-    EndDo
-ACTIVATE DIALOG oDlg CENTERED
+        If (cAlias)->(E2_NUM) == cNum
+           // While (cAlias)->(!Eof()) 
+                                                   
+                oGrid:AddColumn( TCColumn():new('Parcela'   , {||(cAlias)->(E2_PARCELA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Vencimento', {||(cAlias)->(E2_VENCREA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Valor'     , {||(cAlias)->(E2_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Baixa'     , {||(cAlias)->(E2_BAIXA)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Valor Pago', {||(cAlias)->(E5_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+            
+             /*   (cAlias)->(DbSkip())
+            EndDo*/
+        EndIf
 
+ACTIVATE DIALOG oDlg CENTERED
+(cAlias)->(DbCloseArea())
 /*FwRestArea(aAreaSE5)
 FwRestArea(aAreaSE2)*/
 FwRestArea(aAreaSF1)
