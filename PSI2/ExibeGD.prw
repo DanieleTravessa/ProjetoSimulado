@@ -1,6 +1,4 @@
 #INCLUDE'TOTVS.CH'
-//#INCLUDE'TOPCONN.CH'
-//#INCLUDE'TBICONN.CH'
 
 /*/{Protheus.doc} User Function ExibeTP
     (Rotina Personalizada que exibe tela com Títulos a Pagar )
@@ -11,73 +9,45 @@
     /*/
 User Function ExibeGD()
     
-Local aArea    := FwGetArea()
-Local aAreaSF1 := SF1->(FwGetArea())
-/*Local aAreaSE2 := SE2->(FwGetArea())
-Local aAreaSE5 := SE5->(FwGetArea())*/
-Local cAlias   := GetNextAlias()
-Local oGrid
-Local oDlg
-//Local aDados  := {}
-Local cQry := Consulta()
-/*Local cParcela := SE2->E2_PARCELA
-Local cVencim := ''
-Local cValor   := ''
-Local cBaixa   := ''
-Local cValorPg := ''*/
-Private cNum   := SF1->F1_DOC
+    Local aArea    := FwGetArea()
+    Local aAreaSF1 := SF1->(FwGetArea())
+    Local cAlias   := GetNextAlias()
+    Local cQry     := Consulta()
+    Local oGrid
+    Local oDlg
+    Private cNum   := SF1->F1_DOC
 
     DbUseArea(.T.,'TOPCONN',TcGenQry(,,cQry),cAlias,.T.,.T.)
-
-    DbSelectArea(cAlias)
-    //DbSelectArea("SE2")
-    //DbSelectArea("SE5")
-
-   (cAlias)->(DbGoTop())
-    If (cAlias)->(!Eof())
-        While (cAlias)->(!Eof()) .and. (cAlias)->(E2_NUM) == cNum
-            cParcela := (cAlias)->(E2_PARCELA)
-            cVencim  := (cAlias)->(E2_VENCREA)
-            cValor   := (cAlias)->(E2_VALOR)
-            cBaixa   := (cAlias)->(E2_BAIXA)
-            cValorPg := (cAlias)->(E5_VALOR)             
-            (cAlias)->(DbSkip())
-        EndDo
-    EndIf
-   
-    /*SE5->(DbCloseArea())
-    SE2->(DbCloseArea())*/
-
-DEFINE DIALOG oDlg TITLE 'Tìtulos a Pagar' FROM 180,180 TO 550, 700 PIXEL
+          
+    DEFINE MsDIALOG oDlg TITLE 'Status Títulos a Pagar' FROM 180,180 TO 550, 700 PIXEL
     
     oGrid := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,,,,,,,,,,,, .F., cAlias, .T.,, .F.,,, )
-        // DbSelectArea(cAlias)
+   
+    DbSelectArea(cAlias)
         (cAlias)->(DbGoTop())
     
         If (cAlias)->(E2_NUM) == cNum
-           
-                                                   
-                oGrid:AddColumn( TCColumn():new('Parcela'   , {||(cAlias)->(E2_PARCELA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
-                oGrid:AddColumn( TCColumn():new('Vencimento', {||(cAlias)->(E2_VENCREA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
-                oGrid:AddColumn( TCColumn():new('Valor'     , {||(cAlias)->(E2_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
-                oGrid:AddColumn( TCColumn():new('Baixa'     , {||(cAlias)->(E2_BAIXA)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
-                oGrid:AddColumn( TCColumn():new('Valor Pago', {||(cAlias)->(E5_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
-            
-           
+                                                              
+                oGrid:AddColumn( TCColumn():new('Parcela'       , {||(cAlias)->(E2_PARCELA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Vencimento'    , {||(cAlias)->(E2_VENCREA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Valor Original', {||(cAlias)->(E2_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Valor Pago'    , {||(cAlias)->(E5_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+                oGrid:AddColumn( TCColumn():new('Data Pagamento', {||(cAlias)->(E2_BAIXA)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
+     
         EndIf
 
-ACTIVATE DIALOG oDlg CENTERED
-(cAlias)->(DbCloseArea())
-/*FwRestArea(aAreaSE5)
-FwRestArea(aAreaSE2)*/
-FwRestArea(aAreaSF1)
-FwRestArea(aArea)
+    ACTIVATE MsDIALOG oDlg CENTERED
+
+    (cAlias)->(DbCloseArea())
+
+    FwRestArea(aAreaSF1)
+    FwRestArea(aArea)
 
 Return
 
-Static Function Consulta()    
+Static Function Consulta()
 
-Local cNum   := SF1->F1_DOC
+    Local cNum   := SF1->F1_DOC
 
     cQry := " SELECT SE2.E2_NUM, SE2.E2_PARCELA, E2_VENCREA, SE2.E2_VALOR, E2_BAIXA, SE5.E5_VALOR " + CRLF
     cQry += " FROM " + retSqlName('SE2') + " SE2 " + CRLF
@@ -86,5 +56,5 @@ Local cNum   := SF1->F1_DOC
     cQry += " WHERE E2_FILIAL ='" + FWxFilial('SE2') + "'" + CRLF
     cQry += " AND SE2.D_E_L_E_T_='' " + CRLF
     cQry += " AND E2_NUM='" +cNum+ "'"
-Return cQry
 
+Return cQry
