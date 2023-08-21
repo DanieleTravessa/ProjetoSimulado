@@ -53,9 +53,9 @@ DEFINE DIALOG oDlg TITLE 'Tìtulos a Pagar' FROM 180,180 TO 550, 700 PIXEL
     oGrid := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,,,,,,,,,,,, .F., cAlias, .T.,, .F.,,, )
         // DbSelectArea(cAlias)
         (cAlias)->(DbGoTop())
-    //If (cAlias)->(!Eof())
+    
         If (cAlias)->(E2_NUM) == cNum
-           // While (cAlias)->(!Eof()) 
+           
                                                    
                 oGrid:AddColumn( TCColumn():new('Parcela'   , {||(cAlias)->(E2_PARCELA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
                 oGrid:AddColumn( TCColumn():new('Vencimento', {||(cAlias)->(E2_VENCREA)},,,,"LEFT",,.F.,.F.,,,,.F.,))
@@ -63,8 +63,7 @@ DEFINE DIALOG oDlg TITLE 'Tìtulos a Pagar' FROM 180,180 TO 550, 700 PIXEL
                 oGrid:AddColumn( TCColumn():new('Baixa'     , {||(cAlias)->(E2_BAIXA)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
                 oGrid:AddColumn( TCColumn():new('Valor Pago', {||(cAlias)->(E5_VALOR)}  ,,,,"LEFT",,.F.,.F.,,,,.F.,))
             
-             /*   (cAlias)->(DbSkip())
-            EndDo*/
+           
         EndIf
 
 ACTIVATE DIALOG oDlg CENTERED
