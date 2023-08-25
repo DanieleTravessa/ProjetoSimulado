@@ -25,18 +25,17 @@ User Function ExibeGD()
 
 	DEFINE MsDIALOG oDlg TITLE cTitulo FROM 180,180 TO 550, 750 PIXEL
 
-	oGrid := MsBrGetDBase():new( 0, 0, 288, 185,,,, oDlg,,,,,,,,,,,, .F., cAlias, .T.,, .F.,,, )
+	oGrid := MsBrGetDBase():new( 0, 0, 288, 185,,,, oDlg,/*cField*/,/*uVal1*/,/*uVal2*/,/*bChange*/,/*bLDblClick*/,/*bRClick*/,/*oFont*/,/*oCursor*/,/*nClrFore*/,/*nClrBack*/,, .F., cAlias, .T.,, nil,,, )
 
 	DbSelectArea(cAlias)
 	(cAlias)->(DbGoTop())
-//	If (cAlias)->(E2_NUM) == cNum
-
-		oGrid:AddColumn( TCColumn():new("Parcela"       , {||(cAlias)->(E2_PARCELA)}      ,PesqPict('SE2','E2_PARCELA'),,,"CENTER",,.F.,.T.,,,,,))
-		oGrid:AddColumn( TCColumn():new("Vencimento"    , {||StoD((cAlias)->(E2_VENCREA))},PesqPict('SE2','E2_VENCREA'),,,"CENTER",,.F.,.T.,,,,,))
-		oGrid:AddColumn( TCColumn():new("Valor Original", {||(cAlias)->(E2_VALOR)}        ,PesqPict('SE2','E2_VALOR')  ,,,"CENTER",,.F.,.T.,,,,,))
-		oGrid:AddColumn( TCColumn():new("Valor Pago"    , {||(cAlias)->(VlrPago)}         ,PesqPict('SE5','E5_VALOR')  ,,,"CENTER",,.F.,.T.,,,,,))
-		oGrid:AddColumn( TCColumn():new("Data Pagamento", {||StoD((cAlias)->(E2_BAIXA))}  ,PesqPict('SE2','E2_BAIXA')  ,,,"CENTER",,.F.,.T.,,,,,))
-//	ENDIF
+        
+		oGrid:AddColumn( TCColumn():new("Parcela"       , {||(cAlias)->(E2_PARCELA)}       ,PesqPict('SE2','E2_PARCELA'),,,"CENTER",,.F.,.T.,,,,.F.))
+		oGrid:AddColumn( TCColumn():new("Vencimento"    , {||StoD((cAlias)->(E2_VENCREA))} ,PesqPict('SE2','E2_VENCREA'),,,"CENTER",,.F.,.T.,,,,.F.))
+		oGrid:AddColumn( TCColumn():new("Valor Original", {||(cAlias)->(E2_VALOR)}         ,PesqPict('SE2','E2_VALOR')  ,,,"CENTER",,.F.,.T.,,,,.F.))
+		oGrid:AddColumn( TCColumn():new("Valor Pago"    , {||(cAlias)->(VlrPago)}          ,PesqPict('SE5','E5_VALOR')  ,,,"CENTER",,.F.,.T.,,,,.F.))
+		oGrid:AddColumn( TCColumn():new("Data Pagamento", {||StoD((cAlias)->(E2_BAIXA))}   ,PesqPict('SE2','E2_BAIXA')  ,,,"CENTER",,.F.,.T.,,,,.F.))
+        oGrid:Refresh()
 
 	ACTIVATE MsDIALOG oDlg CENTERED
 

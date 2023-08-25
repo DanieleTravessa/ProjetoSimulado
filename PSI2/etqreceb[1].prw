@@ -74,7 +74,7 @@ Static Function fImpressao(cLocImpressao)
     DEFINE Font oBold Name "Arial" Size 0, -13 Bold
                         
     createFromSql(@oGrid1, oDlgEtq)
-                
+//ativa a tela c                
     ACTIVATE MSDIALOG oDlgEtq CENTERED ON INIT (EnchoiceBar(oDlgEtq,{|| chamaEtiq(cLocImpressao), oDlgEtq:End() },{||(oDlgEtq:End() )},,))
 
 Return Nil 

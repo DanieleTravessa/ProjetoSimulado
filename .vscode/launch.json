@@ -24,6 +24,12 @@
 		},
 		{
 			"label": "apsdu"
+		},
+		{
+			"label": "u_BrDBase"
+		},
+		{
+			"label": "u_TdnDBase"
 		}
 	],
 	"lastProgramExecuted": "sigacom"
