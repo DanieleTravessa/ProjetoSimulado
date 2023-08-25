@@ -36,10 +36,11 @@ user function TdnDBase()
     oBrowse:setArray( aDados )
  
     // Cria colunas do browse
-    oBrowse:addColumn( TCColumn():new( "Filial", { || aDados[oBrowse:nAt, 1] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Nome", { || aDados[oBrowse:nAt, 2] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Descrição", { || aDados[oBrowse:nAt, 3] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Conteúdo", { || aDados[oBrowse:nAt, 4] },,,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Parcela", { || aDados[oBrowse:nAt, 1] },PesqPict('SE2','E2_VENCREA'),,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Vencimento", { || aDados[oBrowse:nAt, 2] },,,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Valor", { || aDados[oBrowse:nAt, 3] },,,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Valor Pago", { || aDados[oBrowse:nAt, 4] },,,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Baixa", { || aDados[oBrowse:nAt, 5] },,,, "LEFT",, .F., .F.,,,, .F. ) )    
     oBrowse:Refresh()
  
     // Cria Botões com métodos básicos
