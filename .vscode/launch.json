@@ -21,6 +21,9 @@
 		},
 		{
 			"label": "sigafin"
+		},
+		{
+			"label": "apsdu"
 		}
 	],
 	"lastProgramExecuted": "sigacom"
