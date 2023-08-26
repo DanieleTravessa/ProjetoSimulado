@@ -25,7 +25,7 @@ user function TdnDBase()
     
 	// Cria array com dados
     While !(cAlias)->(EOF())
-		aAdd( aDados, { (cAlias)->(E2_PARCELA), (cAlias)->(E2_VENCREA), (cAlias)->(E2_VALOR), (cAlias)->(VlrPago), (cAlias)->(E2_BAIXA) } )
+		aAdd( aDados, { (cAlias)->(E2_PARCELA), StoD((cAlias)->(E2_VENCREA)), (cAlias)->(E2_VALOR), (cAlias)->(VlrPago), StoD((cAlias)->(E2_BAIXA)) } )
     		(cAlias)->(DbSkip())
 	EndDo
 
@@ -36,11 +36,11 @@ user function TdnDBase()
     oBrowse:setArray( aDados )
  
     // Cria colunas do browse
-    oBrowse:addColumn( TCColumn():new( "Parcela", { || aDados[oBrowse:nAt, 1] },PesqPict('SE2','E2_VENCREA'),,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Vencimento", { || aDados[oBrowse:nAt, 2] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Valor", { || aDados[oBrowse:nAt, 3] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Valor Pago", { || aDados[oBrowse:nAt, 4] },,,, "LEFT",, .F., .F.,,,, .F. ) )
-    oBrowse:addColumn( TCColumn():new( "Baixa", { || aDados[oBrowse:nAt, 5] },,,, "LEFT",, .F., .F.,,,, .F. ) )    
+    oBrowse:addColumn( TCColumn():new( "Parcela", { || aDados[oBrowse:nAt, 1] },PesqPict('SE2','E2_PARCELA'),,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Vencimento", { || aDados[oBrowse:nAt, 2] },PesqPict('SE2','E2_VENCREA'),,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Valor", { || aDados[oBrowse:nAt, 3] },PesqPict('SE2','E2_VALOR'),,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Valor Pago", { || aDados[oBrowse:nAt, 4] },PesqPict('SE5','E5_VALOR'),,, "LEFT",, .F., .F.,,,, .F. ) )
+    oBrowse:addColumn( TCColumn():new( "Baixa", { || aDados[oBrowse:nAt, 5] },PesqPict('SE2','E2_BAIXA'),,, "LEFT",, .F., .F.,,,, .F. ) )    
     oBrowse:Refresh()
  
     // Cria Botões com métodos básicos

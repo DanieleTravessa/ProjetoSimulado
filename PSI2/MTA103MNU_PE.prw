@@ -16,7 +16,7 @@ User Function MTA103MNU()
 
     Local aArea := GetArea()
 
-    aAdd(aRotina, {"ConsultaTP", "u_TdnDBase", 0, 4, 0, Nil})
+    aAdd(aRotina, {"ConsultaTP", "u_ExibeGD", 0, 4, 0, Nil})
 
     RestArea(aArea)
     
