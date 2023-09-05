@@ -23,27 +23,27 @@ User Function ExibeGD()
 
 	DbUseArea(.T.,'TOPCONN',TcGenQry(,,cQry),cAlias,.T.,.T.)
 
-	DEFINE MsDIALOG oDlg TITLE cTitulo FROM 180,180 TO 550, 750 PIXEL
+	DEFINE MsDIALOG oDlg TITLE cTitulo FROM 180,180 TO 550, 700 PIXEL
 //oBrowse := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,          ,         ,         ,,              ,           ,         ,           ,            ,            ,, .F.,cAlias, .T.,, .F.,,, )
-	oGrid := MsBrGetDBase():new( 0, 0, 288, 185,,,, oDlg,/*cField*/,/*uVal1*/,/*uVal2*/,,/*bLDblClick*/,/*bRClick*/,/*oFont*/,/*oCursor*/,/*nClrFore*/,/*nClrBack*/,, .F., cAlias, .T.,, .F.,,, )
+	oGrid := MsBrGetDBase():new( 0, 0, 260, 170,,,, oDlg,/*cField*/,/*uVal1*/,/*uVal2*/,,/*bLDblClick*/,/*bRClick*/,/*oFont*/,/*oCursor*/,/*nClrFore*/,/*nClrBack*/,, .F.,cAlias, .T.,, .F.,,, )
 
 	DbSelectArea(cAlias)
 	(cAlias)->(DbGoTop())
 
-    //oBrowse:addColumn( TCColumn():new( "Parcela"       , { || aDados[oBrowse:nAt, 1] }                ,                            ,,, "LEFT" ,, .F., .F.,,,, .F. ) )        
-		oGrid:AddColumn( TCColumn():new( "Parcela"       , { || ((cAlias)->(E2_PARCELA))}     ,PesqPict('SE2','E2_VENCREA'),,,"CENTER",,.F.,.T.,,,,.F.))
-        oGrid:AddColumn( TCColumn():new( "Vencimento"    , { || StoD((cAlias)->(E2_VENCREA))} ,PesqPict('SE2','E2_PARCELA'),,,"CENTER",,.F.,.T.,,,,.F.))		
-		oGrid:AddColumn( TCColumn():new( "Valor Original", { || (cAlias)->(E2_VALOR)}         ,PesqPict('SE2','E2_VALOR')  ,,,"CENTER",,.F.,.T.,,,,.F.))
-		oGrid:AddColumn( TCColumn():new( "Valor Pago"    , { || (cAlias)->(VlrPago)}          ,PesqPict('SE5','E5_VALOR')  ,,,"CENTER",,.F.,.T.,,,,.F.))
-		oGrid:AddColumn( TCColumn():new( "Data Pagamento", { || StoD((cAlias)->(E2_BAIXA))}   ,PesqPict('SE2','E2_BAIXA')  ,,,"CENTER",,.F.,.T.,,,,.F.))        
+    //oBrowse:addColumn( TCColumn():new( "Parcela"       , { || aDados[oBrowse:nAt, 1] }      ,                            ,,, "LEFT" ,, .F., .F.,,,, .F. ) )        
+		oGrid:AddColumn( TCColumn():new( "Parcela"       , { || (cAlias)->(E2_PARCELA)}     ,PesqPict('SE2','E2_VENCREA'),,,"CENTER",, .F., .T.,,,, .F. ) )
+        oGrid:AddColumn( TCColumn():new( "Vencimento"    , { || StoD((cAlias)->(E2_VENCREA))} ,PesqPict('SE2','E2_PARCELA'),,,"CENTER",, .F., .T.,,,, .F. ) )		
+		oGrid:AddColumn( TCColumn():new( "Valor Original", { || (cAlias)->(E2_VALOR)}         ,PesqPict('SE2','E2_VALOR')  ,,,"CENTER",, .F., .T.,,,, .F. ) )
+		oGrid:AddColumn( TCColumn():new( "Valor Pago"    , { || (cAlias)->(VlrPago)}          ,PesqPict('SE5','E5_VALOR')  ,,,"CENTER",, .F., .T.,,,, .F. ) )
+		oGrid:AddColumn( TCColumn():new( "Data Pagamento", { || StoD((cAlias)->(E2_BAIXA))}   ,PesqPict('SE2','E2_BAIXA')  ,,,"CENTER",, .F., .T.,,,, .F. ) )        
         //oGrid:Refresh()
 
 // Cria Botões com métodos básicos
-   /* TButton():new( 172, 002, "goUp()", oDlg, { || oGrid:goUp(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
-    TButton():new( 172, 052, "goDown()", oDlg, { || oGrid:goDown(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
+   	TButton():new( 172, 002, "goUp()", oDlg, { || oGrid:goUp(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
+	TButton():new( 172, 052, "goDown()", oDlg, { || oGrid:goDown(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
     TButton():new( 172, 102, "goTop()", oDlg, { || oGrid:goTop(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
-    TButton():new( 172, 152, "goBottom()", oDlg, { || oGrid::goBottom(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
-	*/
+    TButton():new( 172, 152, "goBottom()", oDlg, { || oGrid:goBottom(), oGrid:setFocus() }, 40, 010,,, .F., .T., .F.,, .F.,,, .F. )
+	
     ACTIVATE MsDIALOG oDlg CENTERED
 
 	(cAlias)->(DbCloseArea())
