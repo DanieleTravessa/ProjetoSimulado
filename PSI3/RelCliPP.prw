@@ -12,7 +12,7 @@
     (examples)
     @see (links_or_references)
     /*/
-User Function RelCliP2()
+User Function RelCliPP()
 
 Local aArea     := FWGetArea()
 Local wnRel     
