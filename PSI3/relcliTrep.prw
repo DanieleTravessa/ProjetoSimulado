@@ -1,4 +1,10 @@
 #INCLUDE'TOTVS.CH'
+#INCLUDE'RWMAKE.CH'
+
+#DEFINE cCod 'A1_COD'
+#DEFINE cNom 'A1_NOME'
+#DEFINE cMun 'A1_MUN'
+#DEFINE cUF  'A1_EST'
 
  /*/{Protheus.doc} RelCliTrep
     (long_description)
@@ -13,6 +19,9 @@
     @see (links_or_references)
     /*/
 User Function RelCliTrep()
+
+    Local aArea     := FwGetArea()
+    Local aAreaSA1  := SA1->(FwGetArea())
     
     Private oReport
 
@@ -20,28 +29,57 @@ User Function RelCliTrep()
 
     oReport :PrintDialog()
     
+    FwRestArea(aAreaSA1)
+    FwRestArea(aArea)
+    
+
 Return 
 
 Static Function GeraReport()
 
-    Local aArea     := FwGetArea()
-    Local aAreaSA1  := SA1->(FwGetArea())
     Local cAlias    := 'SA1'
-    Private oSection
+    Local cRepName  := 'RelCliTrep'
+    Local cTitulo   := 'Relatório de Clientes'
+    Local oReport
+    /*Local cCod    := 'A1_COD'
+    Local cNom    := 'A1_NOME'
+    Local cMun    := 'A1_MUN'
+    Local cUF     := 'A1_EST' */
+    Local oSection
 
-    oReport := TReport():New('RelCliTrep','Relatório de Clientes',,{|oReport| Imprime(oReport, cAlias)}, 'Esse relatório imprimirá os clientes cadastrados.',.F.,,,,.T.,.T.)
+    oReport := TReport():New(cRepName,cTitulo,,{|oReport| Imprime(oReport, cAlias)}, 'Esse relatório imprimirá os clientes cadastrados.',.F.,,,,.T.,.T.)
+    oReport:SetPortrait()
+   // oReport:SetPaperSize(9) 
+    oReport:ShowHeader()
+    
     oSection := TRSection():New(oReport,'Clientes Cadastrados',,,.F.,.T.)
 
-    TRCell():New(oSection, 'A1_COD' ,'SA1','Código'      , PesqPict('SA1','A1_COD') ,08,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
-    TRCell():New(oSection, 'A1_NOME','SA1','Razão Social', PesqPict('SA1','A1_NOME'),20,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
-    TRCell():New(oSection, 'A1_MUN' ,'SA1','Município'   , PesqPict('SA1','A1_MUN') ,20,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
-    TRCell():New(oSection, 'A1_EST' ,'SA1','Estado'      , PesqPict('SA1','A1_EST') ,08,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
-
-    FwRestArea(aArea)
-    FwRestArea(aAreaSA1)
+    TRCell():New(oSection, cCod,cAlias, TitSX3('A1_COD')[1] , PesqPict('SA1','A1_COD') ,08,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
+    TRCell():New(oSection, cNom,cAlias, TitSX3('A1_NOME')[1], PesqPict('SA1','A1_NOME'),20,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
+    TRCell():New(oSection, cMun,cAlias, TitSX3('A1_MUN')[1] , PesqPict('SA1','A1_MUN') ,20,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
+    TRCell():New(oSection, cUF, cAlias, TitSx3('A1_EST')[1] , PesqPict('SA1','A1_EST') ,08,,,'CENTER',.T.,'CENTER',,,.T.,,,.T.)
+    
 Return oReport
 
 Static Function Imprime(oReport, cAlias)
 
-3456789=
+    Local oSection := oReport:Section(1)
+
+    oReport:StartPage()
+    oSection:Init()
+
+    //oSection:SetHeaderSection(.T)
+
+    DbSelectArea(cAlias)
+    (cAlias)->(dbGoTop())
+
+    While !(cAlias)->(EOF())
+        
+        oSection:Cell(cCod):SetValue((cAlias)->A1_COD)
+        oSection:PrintLine()
+
+        (cAlias)->(dbSkip())
+    EndDo
+    oSection:Finish()
+    oReport:EndPage()
 Return
