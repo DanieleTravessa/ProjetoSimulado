@@ -11,9 +11,11 @@ Local n := 1
     dbSetOrder(2)
     If MsSeek(xFilial('SC1')+aCols[n][nProduto])     
         SC1->(DbGoTop())
-        While !SC1->(EOF())
-            nVlrTotal += aCols[n][nVlrSug]
+        While !SC1->(EOF()) 
             n++
+            If !Empty(aCols[n][nProduto])
+                nVlrTotal += aCols[n][nVlrSug]
+            EndIf
         SC1->(DbSkip())
         EndDo
     EndIf
