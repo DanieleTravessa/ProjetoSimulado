@@ -1,6 +1,6 @@
 #INCLUDE 'TOTVS.CH'
 
-User Function  VlrSugCP()
+User Function  zVlrSugCP()
 
 Local aArea := FwGetArea()
 Local aAreaCP := SCP->(FwGetArea())

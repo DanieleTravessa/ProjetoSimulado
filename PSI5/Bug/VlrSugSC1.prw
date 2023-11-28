@@ -1,6 +1,6 @@
 #INCLUDE 'TOTVS.CH'
 
-User Function  VlrSugC1()
+User Function  zVlrSugC1()
 
 Local aArea := FWGetArea()
 Local aAreaC1 := SC1->(FWGetArea())
