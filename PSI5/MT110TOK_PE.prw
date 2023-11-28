@@ -1,25 +1,18 @@
 #INCLUDE 'TOTVS.CH'
 
 User Function  MT110TOK()
+    
+        Local aArea := GetArea()
+        Local aAreaC1 := SC1->(GetArea())
+        Local lAciona := .F.
+    
+        If ExistBlock('VlSugSC1')
+            lAciona := ExecBlock('VlSugSC1', .F., .F.)
+        Endif
 
-Local nVlrSug    := aScan(aHeader,{|x| AllTrim(x[2]) == 'C1_ZZPRCSG'})
-Local nProduto   := aScan(aHeader,{|x| AllTrim(x[2]) == 'C1_PRODUTO'})
-Local nVlrTotal  := 0
-Local n := 1
+        RestArea(aAreaC1)
+        RestArea(aArea)
 
-    dbSelectArea('SC1')
-    dbSetOrder(2)
-    If MsSeek(xFilial('SC1')+aCols[n][nProduto])     
-        SC1->(DbGoTop())
-        //While !SC1->(EOF()) 
-            For n := 1 to len(aCols)
-                nVlrTotal += aCols[n][nVlrSug]
-            Next
-        //SC1->(DbSkip())
-        //EndDo
-    EndIf
-    MSGALERT('O valor total sugerido para essa solicitação é de R$' + cValToChar(nVlrTotal), 'Valor Sugerido')     
-
-Return
+Return lAciona
 
 
