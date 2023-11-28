@@ -23,11 +23,14 @@ Private cSize     := 'M'
 Private aReturn   := {'Zebrado',1,'Administracao',1,2,1,'',1}
 Private nLastKey
 
-wnRel := SetPrint(cAlias, cProg,'', @cTitulo, cDesc1, cDesc2, cDesc3, .F.,,.T.,cSize,,.F.)
+IF Pergunte('ZRELCLIPR',.T.)
 
-If nLastKey <> 27
-    SetDefault(aReturn,cAlias)
-    RptStatus({|lEnd| Imprime(@lEnd,wnRel,cAlias,cTitulo)},cTitulo)
+    wnRel := SetPrint(cAlias, cProg,'', @cTitulo, cDesc1, cDesc2, cDesc3, .F.,,.T.,cSize,,.F.)
+
+    If nLastKey <> 27
+        SetDefault(aReturn,cAlias)
+        RptStatus({|lEnd| Imprime(@lEnd,wnRel,cAlias,cTitulo)},cTitulo)
+    EndIf
 EndIf
 
 FwRestArea(aArea)
@@ -38,7 +41,7 @@ Static Function Imprime(lEnd,wnRel,cAlias,cTitulo)
 
 Local aArea     := FwGetArea()
 Local aAreaSA1  := SA1->(FwGetArea())
-Local nLinha    := 80
+Local nLinha    := 00
 Local cabec1    := ''
 Local cabec2    := ''
 Local nTipo := 0
@@ -48,28 +51,37 @@ nCntImpr := 0
 m_pag := 1
 nTipo := If(aReturn[4]==1,15,18)
 
-If nLinha > 60
-cabec(cTitulo,cabec1,cabec2,cProg,cSize,nTipo)
+
+cabec(cTitulo,cabec1,cabec2,cProg,cSize,nTipo,,.F.)
 nLinha := 08
-EndIf
+
 
 DbSelectArea('SA1')
 SA1->(DbSetOrder(1))
 DbGoTop()
 
 While !EOF()
-    @nLinha, 01 PSAY TitSX3('A1_COD')[1]+':' + (SA1->A1_COD)
-    nLinha++
-    @nLinha, 01 PSAY TitSX3('A1_NOME')[1]+':'+ (SA1->A1_NOME)
-    nLinha++
-    @nLinha, 01 PSAY TitSX3('A1_MUN')[1]+':'+ (SA1->A1_MUN) 
-    nLinha++
-    @nLinha, 01 PSAY TitSX3('A1_EST')[1]+':' + (SA1->A1_EST)
-    nLinha++ 
-    @nLinha, 00 PSAY __PrtThinLine()
-    nLinha++
+    
+    If SA1->A1_EST == MV_PAR01
+        @nLinha, 01 PSAY TitSX3('A1_COD')[1]+':' + (SA1->A1_COD)
+        nLinha++
+        @nLinha, 01 PSAY TitSX3('A1_NOME')[1]+':'+ (SA1->A1_NOME)
+        nLinha++
+        @nLinha, 01 PSAY TitSX3('A1_MUN')[1]+':'+ (SA1->A1_MUN) 
+        nLinha++
+        @nLinha, 01 PSAY TitSX3('A1_EST')[1]+':' + (SA1->A1_EST)
+        nLinha++ 
+        @nLinha, 00 PSAY __PrtThinLine()
+        nLinha++
+    EndIF
 
+    If nLinha > 60
+        cabec(cTitulo,cabec1,cabec2,cProg,cSize,nTipo,,.F.)
+        nLinha := 08
+    EndIf
+    
     SA1->(DbSkip())
+    
 EndDo
 
 SET DEVICE TO SCREEN 
