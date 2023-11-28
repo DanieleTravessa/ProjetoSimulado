@@ -1,22 +1,19 @@
 #INCLUDE 'TOTVS.CH'
 
-User Function  MT110TOK()
+User Function  MTA105OK()
 
-Local nVlrSug    := aScan(aHeader,{|x| AllTrim(x[2]) == 'C1_ZZPRCSG'})
-Local nProduto   := aScan(aHeader,{|x| AllTrim(x[2]) == 'C1_PRODUTO'})
+Local nVlrSug    := aScan(aHeader,{|x| AllTrim(x[2]) == 'CP_ZZPRCSG'})
+Local nProduto   := aScan(aHeader,{|x| AllTrim(x[2]) == 'CP_PRODUTO'})
 Local nVlrTotal  := 0
 Local n := 1
 
-    dbSelectArea('SC1')
+    dbSelectArea('SCP')
     dbSetOrder(2)
-    If MsSeek(xFilial('SC1')+aCols[n][nProduto])     
+    If MsSeek(xFilial('SCP')+aCols[n][nProduto])     
         SC1->(DbGoTop())
-        //While !SC1->(EOF()) 
             For n := 1 to len(aCols)
                 nVlrTotal += aCols[n][nVlrSug]
             Next
-        //SC1->(DbSkip())
-        //EndDo
     EndIf
     MSGALERT('O valor total sugerido para essa solicitação é de R$' + cValToChar(nVlrTotal), 'Valor Sugerido')     
 
